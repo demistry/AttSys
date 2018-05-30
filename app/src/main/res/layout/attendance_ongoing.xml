@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="8dp"
+    android:paddingLeft="16dp"
+    android:paddingStart="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp">
+
+
+    <FrameLayout
+        android:id="@+id/attendance_indicator_card"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:elevation="8dp"
+        android:background="#7F6E035D"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Attendance Ongoing"
+            android:textColor="#fff"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:elevation="8dp"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/attendance_indicator_card"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            >
+
+            <TextView
+                android:id="@+id/course_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Power Systems"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"/>
+
+            <TextView
+                android:id="@+id/course_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/course_title"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:text="EEE 533"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textAllCaps="true" />
+            <TextView
+                android:id="@+id/course_credit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="#fff"
+                android:textStyle="italic"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:layout_below="@id/course_code"
+                android:text="3 credits" />
+
+            <TextView
+                android:id="@+id/week_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#fff"
+                android:textStyle="italic"
+                android:layout_marginTop="8dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@id/course_title"
+                android:layout_alignTop="@id/course_title"
+
+                android:text="Week 3"
+                android:layout_alignParentRight="true" />
+            <TextView
+                android:id="@+id/course_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/course_credit"
+                android:layout_above="@id/take_attendance_btn"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#fff"
+                android:layout_marginTop="8dp"
+                android:fontFamily="serif"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/dummy_desc"/>
+
+            <Button
+                android:id="@+id/take_attendance_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:elevation="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/item_button_background"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="Take Attendance"
+                android:textStyle="bold"
+                android:textColor="#fff"/>
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+</android.support.constraint.ConstraintLayout>
