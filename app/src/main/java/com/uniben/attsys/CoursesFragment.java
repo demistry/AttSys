@@ -31,6 +31,7 @@ public class CoursesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_courses, container, false);
         recyclerView = view.findViewById(R.id.courses_recycler_view);
+        recyclerView.addItemDecoration(new RecyclerViewItemDivider(this.getContext()));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(new CoursesViewAdapter());
         return view;
