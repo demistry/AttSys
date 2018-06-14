@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.v7.widget.CardView android:layout_width="match_parent"
+    android:layout_height="350dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/colorPrimary"
+
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            >
+
+            <TextView
+                android:id="@+id/course_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Power Systems"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"/>
+
+            <TextView
+                android:id="@+id/course_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/course_title"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:text="EEE 533"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textAllCaps="true" />
+            <TextView
+                android:id="@+id/course_credit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="#fff"
+                android:textStyle="italic"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:layout_below="@id/course_code"
+                android:text="3 credits" />
+
+            <TextView
+                android:id="@+id/week_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#fff"
+                android:textStyle="italic"
+                android:layout_marginTop="8dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@id/course_title"
+                android:layout_alignTop="@id/course_title"
+
+                android:text="Week 3"
+                android:layout_alignParentRight="true" />
+            <TextView
+                android:id="@+id/course_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/course_credit"
+                android:layout_above="@id/take_attendance_btn"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#fff"
+                android:layout_marginTop="8dp"
+                android:fontFamily="serif"
+                android:paddingLeft="4dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/dummy_desc"/>
+
+            <Button
+                android:id="@+id/take_attendance_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:elevation="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/item_button_background"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="Take Attendance"
+                android:textStyle="bold"
+                android:textColor="#fff"/>
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>

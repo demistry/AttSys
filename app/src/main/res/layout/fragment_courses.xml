@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:id="@+id/registered_courses_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:elevation="8dp"
+        android:background="#7F6E035D"
+        tools:layout_editor_absoluteY="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Registered Courses"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:textColor="#fff"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/courses_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/registered_courses_layout">
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

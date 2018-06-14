@@ -1,0 +1,26 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Android\\sdk\\AttSys-geofencing_branch\\swad\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-w480dp-v13\\values-w480dp-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\ILENWABOR DAVID\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-21.0.0.aar\\a7ad4c7e2b62d7137eab0a9446172cd6\\res\\values-w480dp\\values.xml",
+                    "from": {
+                        "startLines": "3,4",
+                        "startColumns": "4,4",
+                        "startOffsets": "56,118",
+                        "endColumns": "61,71",
+                        "endOffsets": "113,185"
+                    },
+                    "to": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,117",
+                        "endColumns": "61,71",
+                        "endOffsets": "112,184"
+                    }
+                }
+            ]
+        }
+    ]
+}
