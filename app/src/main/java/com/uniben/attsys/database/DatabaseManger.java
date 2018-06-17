@@ -47,5 +47,8 @@ public class DatabaseManger {
     }
 
 
-
+    public Single<Integer> deleteUser(User user) {
+        return Single.fromCallable(()->userDao.delete(user))
+                .subscribeOn(Schedulers.io());
+    }
 }

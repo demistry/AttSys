@@ -71,7 +71,7 @@
                 android:layout_alignBottom="@id/course_title"
                 android:layout_alignTop="@id/course_title"
 
-                android:text="Week 3"
+                android:text=""
                 android:layout_alignParentRight="true" />
             <TextView
                 android:id="@+id/course_description"

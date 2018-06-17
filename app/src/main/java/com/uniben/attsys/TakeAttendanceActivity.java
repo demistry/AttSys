@@ -13,6 +13,7 @@ public class TakeAttendanceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.attendance_taken_layout);
 
     }
 }

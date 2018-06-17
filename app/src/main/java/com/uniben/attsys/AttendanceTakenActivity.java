@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.uniben.attsys.utils.Constants;
+
 public class AttendanceTakenActivity extends AppCompatActivity {
 
     private Button homeButton;
@@ -14,6 +16,7 @@ public class AttendanceTakenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attendance_taken_layout);
         homeButton = findViewById(R.id.home_btn);
-        homeButton.setOnClickListener(v -> startActivity(new Intent(AttendanceTakenActivity.this, CoursesActivity.class)));
+//        intent.putExtra(Constants.USER_KEY, user);
+        homeButton.setOnClickListener(v -> finish());
     }
 }

@@ -17,10 +17,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.uniben.attsys.adapters.ViewPagerAdapter;
 import com.uniben.attsys.api.AttSysApi;
 import com.uniben.attsys.api.ServiceGenerator;
+import com.uniben.attsys.database.DatabaseManger;
 import com.uniben.attsys.dialogs.LoadingDialog;
 import com.uniben.attsys.fragments.AttendanceFragment;
 import com.uniben.attsys.models.Attendance;
@@ -38,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import id.zelory.compressor.Compressor;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -164,6 +168,20 @@ public class CoursesActivity extends AppCompatActivity implements AttendanceFrag
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.logout, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.logout){
+            displayDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onTakeAttendace(Attendance attendance) {
         mAttendance = attendance;
         // NotificationUtils.notifyUser(viewPager, "Attendance section is in development");
@@ -178,17 +196,41 @@ public class CoursesActivity extends AppCompatActivity implements AttendanceFrag
         return new DisposableObserver<FaceRecognitionResponse>() {
             @Override
             public void onNext(FaceRecognitionResponse faceRecognitionResponse) {
+                SaveObject.getInstance().setFaceObject(faceRecognitionResponse);
+                loadingDialog.dismissWithAnimation();
                 Log.v("TAG", "Message is " + faceRecognitionResponse.getMessage());
                 Log.v("TAG", "Similarity is " + faceRecognitionResponse.getSimilarity());
-                NotificationUtils.notifyUser(viewPager, "Uploading successfully returned");
+                NotificationUtils.notifyUser(viewPager, faceRecognitionResponse.getMessage());
+                startActivity(new Intent(CoursesActivity.this, AttendanceTakenActivity.class));
 
             }
 
             @Override
             public void onError(Throwable e) {
-                NotificationUtils.notifyUser(viewPager, "Error occurred");
+                FaceRecognitionResponse faceRecognitionResponse = SaveObject.getInstance().getFaceRecognitionResponse();
+                if (faceRecognitionResponse!=null){
+                    loadingDialog.show();
+                    loadingDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                    loadingDialog.setContentText(faceRecognitionResponse.getMessage());
+                    loadingDialog.setConfirmText("Return");
+                    loadingDialog.setConfirmClickListener(sweetAlertDialog -> {
+                        loadingDialog.dismissWithAnimation();
+                    });
+                    NotificationUtils.notifyUser(viewPager, faceRecognitionResponse.getMessage());
+                }
+                else{
+                    loadingDialog.show();
+                    loadingDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                    loadingDialog.setContentText("An error occurred, your attendance has probably been taken already");
+                    loadingDialog.setConfirmText("Retry");
+                    loadingDialog.setConfirmClickListener(sweetAlertDialog -> {
+                        callCamera();
+                    });
+                    NotificationUtils.notifyUser(viewPager, "Error occurred");
 
-                e.printStackTrace();
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
@@ -203,14 +245,33 @@ public class CoursesActivity extends AppCompatActivity implements AttendanceFrag
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 120 && resultCode == RESULT_OK){
 
+            loadingDialog = new LoadingDialog(this, "Processing Image..");
+            loadingDialog.show();
             File file = new File(currentImagePath);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-            AttSysApi attSysApi = ServiceGenerator.createService(AttSysApi.class);
-            attSysApi.verifyPicture("Token "+ user.getToken().getToken(), body,mAttendance.getId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(getFacialResults());
+            Log.v("TAG", "Original image size is " + file.length()/1000);
+
+            try {
+                File compressedImage = new Compressor(this).compressToFile(file);
+                RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), compressedImage);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("file", compressedImage.getName(), requestBody);
+                AttSysApi attSysApi = ServiceGenerator.createService(AttSysApi.class);
+                attSysApi.verifyPicture("Token "+ user.getToken().getToken(), body,mAttendance.getId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(getFacialResults());
+                Log.v("TAG", "compressed size is "+ compressedImage.length()/1000);
+            } catch (IOException e) {
+                e.printStackTrace();
+                NotificationUtils.notifyUser(this, "Image too Large to be compressed, retry");
+            }
+
+//            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), compressedImage);
+//            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+//            AttSysApi attSysApi = ServiceGenerator.createService(AttSysApi.class);
+//            attSysApi.verifyPicture("Token "+ user.getToken().getToken(), body,mAttendance.getId())
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(getFacialResults());
         }
 
     }
@@ -237,7 +298,7 @@ public class CoursesActivity extends AppCompatActivity implements AttendanceFrag
             }
         }
     }
-        private File createImageFile() throws IOException {
+    private File createImageFile() throws IOException {
             // Create an image file name
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String imageFileName = "JPEG_" + timeStamp + "_";
@@ -249,17 +310,45 @@ public class CoursesActivity extends AppCompatActivity implements AttendanceFrag
             );
 
             currentImagePath = image.getPath();
-            Bitmap bitmap;
-            try {
-                bitmap = BitmapFactory.decodeFile(image.getPath ());
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, new FileOutputStream(image));
-                Log.v("TAG", "File Compressed");
-            }
-            catch (Throwable t) {
-                Log.v("TAG", "Error compressing file." + t.toString ());
-                t.printStackTrace ();
-            }
+//            Bitmap bitmap;
+//            try {
+//                bitmap = BitmapFactory.decodeFile(image.getPath ());
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, new FileOutputStream(image));
+//                Log.v("TAG", "File Compressed");
+//            }
+//            catch (Throwable t) {
+//                Log.v("TAG", "Error compressing file." + t.toString ());
+//                t.printStackTrace ();
+//            }
+        //Log.v("TAG", "Old image size is " + image.length()/1000);
+
             return image;
         }
+
+    private void displayDialog(){
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.changeAlertType(SweetAlertDialog.WARNING_TYPE);
+        sweetAlertDialog.setTitleText("Alert");
+        sweetAlertDialog.setContentText("Are you sure you want to log out?");
+        sweetAlertDialog.setConfirmText(getString(android.R.string.ok));
+        sweetAlertDialog.setCancelText(getString(android.R.string.cancel));
+        sweetAlertDialog.setConfirmClickListener(
+                sweetAlertDialog1 -> {
+                    logUserOut();
+                    sweetAlertDialog1.dismissWithAnimation();
+                }
+        );
+        sweetAlertDialog.setCancelClickListener(SweetAlertDialog::dismissWithAnimation);
+        sweetAlertDialog.show();
+    }
+
+    private void logUserOut() {
+        DatabaseManger databaseManger = new DatabaseManger(this);
+        databaseManger.deleteUser(user)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
 
 }
